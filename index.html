@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html" charset="UTF-8">
+
+    <title>Marvel Museum</title>
+
+    <link rel="icon" type="image/png" href="./images/favicon.png">
+
+    <link rel="stylesheet" href="./style.css">
+
+</head>
+
+<body>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="text/javascript" src= "./lib/three.js"></script>
+    <script type="text/javascript" src= "./lib/OrbitControls.js"></script>
+    <script src="./main.js"></script>
+
+
+
+    <div id="background_menu"></div>
+    <div id="menu">
+        <div id="img_container">
+            <img src="./images/marvel.jpg">
+        </div>
+        <div id="content">
+            <h1>Marvel Museum Walkthrough <br> with Three.js</h1>
+            <div>
+                <p>Instructions:</p>
+                <p>Use W/A/S/D or Arrows to Move Around</p>
+                <p>Mouse to Control the Camera</p>
+            </div>
+            <div id="play_button">
+                <p>ENTER THE MUSEUM</p>
+            </div>
+        </div> 
+      </div>
+    
+    <script>
+        var playButton = document.getElementById("play_button");
+        playButton.addEventListener("click", function() {
+            var menu = document.getElementById("menu");
+            menu.classList.add("hide");
+        });
+    </script>
+    
+</body>
+
+</html>
