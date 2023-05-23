@@ -1,0 +1,11 @@
+Model Information:
+* title:	Baby Groot (Textured)
+* source:	https://sketchfab.com/3d-models/baby-groot-textured-39d2a85f30c04e09a8679617f0aa86d9
+* author:	CAPTAAINR (https://sketchfab.com/CAPTAAINR)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Baby Groot (Textured)" (https://sketchfab.com/3d-models/baby-groot-textured-39d2a85f30c04e09a8679617f0aa86d9) by CAPTAAINR (https://sketchfab.com/CAPTAAINR) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

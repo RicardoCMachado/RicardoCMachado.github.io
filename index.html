@@ -32,12 +32,6 @@
 
 
 
-
-
-
-
-
-
 <body>
     <script async src="./bib/helper.js"></script>
     <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
@@ -45,7 +39,8 @@
     <script type="importmap">
         {
             "imports": {
-                "three": "https://threejs.org/build/three.module.js"
+                "three": "https://threejs.org/build/three.module.js",
+                "three/addons/": "https://threejs.org/examples/jsm/"
             }
         }
     </script>
@@ -53,7 +48,17 @@
     <script type="module">
 
         import * as THREE from 'three';
-        
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import Stats from "three/addons/libs/stats.module.js";
+        import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+        import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+        import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+        import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+
+        const loader = new GLTFLoader();
+    
+
         // ************************** //
         // Add Scene
         // ************************** //
@@ -76,22 +81,6 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor(0xffffff);
         document.body.appendChild(renderer.domElement);
-
-
-        // ************************** //
-        // Add Ambient Light
-        // ************************** //
-        const ambientLight = new THREE.PointLight(0xffffff);
-        ambientLight.position.copy(camera.position);
-        scene.add(ambientLight);
-
-
-        // ************************** //
-        // Add Sun Light
-        // ************************** //
-        const sunLight = new THREE.DirectionalLight(0xdddddd);
-        sunLight.position.y = 15;
-        scene.add(sunLight);
 
 
 
@@ -151,7 +140,7 @@
         // ************************** //
         // Add Player Position
         // ************************** //
-        const playerPos = new THREE.Vector3(0, 2, 5);
+        const playerPos = new THREE.Vector3(0, 3, 5);
 
 
         // ************************** //
@@ -195,6 +184,7 @@
 
 
         const planeGeo = new THREE.PlaneGeometry(60, 45);
+        const planeGeo2 = new THREE.PlaneGeometry(45, 45);
         const planeMat = new THREE.MeshBasicMaterial({map: wallsTexture,side: THREE.DoubleSide});
 
 
@@ -208,12 +198,12 @@
 
 
         // Left Wall
-        const leftWall = new THREE.Mesh(planeGeo,planeMat);
+        const leftWall = new THREE.Mesh(planeGeo2,planeMat);
         leftWall.rotation.y = Math.PI / 2; 
         leftWall.position.x = -30; 
 
         // Right Wall
-        const rightWall = new THREE.Mesh(planeGeo,planeMat);
+        const rightWall = new THREE.Mesh(planeGeo2,planeMat);
         rightWall.position.x = 30;
         rightWall.rotation.y = Math.PI / 2; 
 
@@ -224,6 +214,146 @@
         wallGroup.children[i].BBox = new THREE.Box3();
         wallGroup.children[i].BBox.setFromObject(wallGroup.children[i]);
         }
+
+
+
+          // ************************** //
+        // Add Ambient Lights
+        // ************************** //
+        const ambientLight = new THREE.PointLight(0xffffff);
+        ambientLight.position.copy(camera.position);
+        scene.add(ambientLight);
+
+        const ambientLight2 = new THREE.PointLight(0xffffff);
+        ambientLight2.position.set(29, 10, -15);
+        scene.add(ambientLight2);
+
+        const ambientLight3 = new THREE.PointLight(0xffffff);
+        ambientLight3.position.set(28, 10, -15);
+        scene.add(ambientLight3);
+
+        const ambientLight4 = new THREE.PointLight(0xffffff);
+        ambientLight4.position.set(28, 10, -20);
+        scene.add(ambientLight4);
+
+        // ************************** //
+        // Add Sun Light
+        // ************************** //
+        const sunLight = new THREE.DirectionalLight(0xffffff, 1);
+        sunLight.position.y = 0
+        scene.add(sunLight);
+
+
+
+        // Variável para controlar o estado da luz
+        var isLightOn = false;
+
+        // Função para alternar o estado da luz
+        function toggleLight() {
+            isLightOn = !isLightOn;
+            ambientLight.visible = isLightOn;
+            ambientLight2.visible = isLightOn;
+            ambientLight3.visible = isLightOn;
+            ambientLight4.visible = isLightOn;
+            sunLight.visible = isLightOn;
+        }
+
+        // Adicionar um ouvinte de eventos para o pressionamento da tecla
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'L' || event.key === 'l') {
+                toggleLight();
+            }
+        });
+
+
+    
+        // Criar o material com a textura
+        var texture12 = new THREE.TextureLoader().load('/images/marmore.jpeg');
+        var material12 = new THREE.MeshBasicMaterial({ map: texture12 });
+        var geometry12 = new THREE.BoxGeometry(4, 3, 4);
+        var cube12 = new THREE.Mesh(geometry12, material12);
+
+        // Posicionar o cubo abaixo do objeto
+        cube12.position.set(28, -2, -15);
+
+        // Adicionar o cubo à cena
+        scene.add(cube12);
+
+        loader.load(
+            './models/iron_man/scene.gltf',
+            
+            function ( gltf ) {
+                gltf.scene.position.set(28, -0.5, -15);
+                gltf.scene.scale.set(0.0038, 0.0038, 0.0038);
+                gltf.scene.rotation.y = THREE.MathUtils.degToRad(-90);
+
+                scene.add( gltf.scene );
+
+            }
+        );
+
+         // Criar o material com a textura
+         var texture12 = new THREE.TextureLoader().load('/images/marmore.jpeg');
+        var material12 = new THREE.MeshBasicMaterial({ map: texture12 });
+        var geometry12 = new THREE.BoxGeometry(4, 3, 4);
+        var cube12 = new THREE.Mesh(geometry12, material12);
+
+        // Posicionar o cubo abaixo do objeto
+        cube12.position.set(28, -2, -5);
+
+        // Adicionar o cubo à cena
+        scene.add(cube12);
+
+        loader.load(
+            './models/spider/scene.gltf',
+            
+            function ( gltf ) {
+                gltf.scene.position.set(28, -0.5, -5);
+                gltf.scene.scale.set(0.052, 0.052, 0.052);
+                gltf.scene.rotation.y = THREE.MathUtils.degToRad(-90);
+
+                scene.add( gltf.scene );
+
+            }
+        );
+
+         // Criar o material com a textura
+         var texture12 = new THREE.TextureLoader().load('/images/marmore.jpeg');
+        var material12 = new THREE.MeshBasicMaterial({ map: texture12 });
+        var geometry12 = new THREE.BoxGeometry(4, 3, 4);
+        var cube12 = new THREE.Mesh(geometry12, material12);
+
+        // Posicionar o cubo abaixo do objeto
+        cube12.position.set(28, -2, 5);
+
+        // Adicionar o cubo à cena
+        scene.add(cube12);
+
+        loader.load(
+            './models/rocket/scene.gltf',
+            
+            function ( gltf ) {
+                gltf.scene.position.set(29, -0.5, 5);
+                gltf.scene.scale.set(4, 4, 4);
+                gltf.scene.rotation.y = THREE.MathUtils.degToRad(170);
+
+                scene.add( gltf.scene );
+
+            }
+        );
+
+        loader.load(
+            './models/groot/scene.gltf',
+            
+            function ( gltf ) {
+                gltf.scene.position.set(26.5, -0.3, 5);
+                gltf.scene.scale.set(400, 400, 400);
+                gltf.scene.rotation.y = THREE.MathUtils.degToRad(-90);
+
+                scene.add( gltf.scene );
+
+            }
+        );
 
 
         // ************************** //
@@ -282,7 +412,7 @@
                     }
                     break;
                 case 16: // shift
-                    if (playerPos.y - 1 >= floorPlane.position.y + 5) {
+                    if (playerPos.y - 1 >= floorPlane.position.y + 4) {
                         playerPos.y -= 1;
                     }
                     break;
