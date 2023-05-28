@@ -16,11 +16,17 @@
             <img src="./images/marvel.jpg">
         </div>
         <div id="content">
-            <h1>Marvel Museum Walkthrough <br> with Three.js</h1>
+            <h2>Marvel Museum Walkthrough <br> with Three.js</h2>
             <div>
-                <p>Instructions:</p>
-                <p>Use W/A/S/D or Arrows to Move Around, Space and Shift to go Up and Down</p>
-                <p>Mouse to Control the Camera</p>
+                <p>Instructions:</p><br/>
+                <div style="display: flex; justify-content: center;">
+                <ul s>
+                    <li>Use W/A/S/D or Arrows to Move Around</li>
+                    <li>Use Space and Shift to go Up and Down</li>
+                    <li>Use Mouse to Control the Camera</li>
+                    <li>Use L to control the lights</li>
+                </ul>
+                </div>
             </div>
             <div id="play_button">
                 <p>ENTER THE MUSEUM</p>
@@ -83,13 +89,6 @@
         document.body.appendChild(renderer.domElement);
 
 
-
-        // ************************** //
-        // Add Listener to Move
-        // ************************** //
-        document.addEventListener('keydown', onKeyDown, false);
-
-
         // ************************** //
         // Stuff to Move Camera
         // ************************** //
@@ -135,6 +134,61 @@
         function onMouseUp(event) {
             isDragging = false;
         }
+
+
+        // ************************** //
+        // Stuff to Move Character and Avoid Crossing Walls
+        // ************************** //
+
+        document.addEventListener('keydown', onKeyDown, false);
+
+        function onKeyDown(event) {
+            const movementSpeed = 1;
+
+            const frontDirection = new THREE.Vector3(0, 0, -1);
+            const sideDirection = new THREE.Vector3(-1, 0, 0);
+
+            const frontMovement = frontDirection.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), camera.rotation.y);
+            const sideMovement = sideDirection.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), camera.rotation.y);
+
+            switch (event.keyCode) {
+                case 83: // w
+                case 40: // up arrow
+                    if (playerPos.z - movementSpeed >= (wallGroup.children[0].BBox.max.z) + movementSpeed && playerPos.y + 1 <= ceilingPlane.position.y) {
+                        playerPos.add(frontMovement.multiplyScalar(-movementSpeed));
+                    }
+                    break;
+                case 87: // s
+                case 38: // down arrow
+                    if (playerPos.z + movementSpeed <= wallGroup.children[3].BBox.min.z && playerPos.y - 1 >= floorPlane.position.y) {
+                        playerPos.add(frontMovement.multiplyScalar(movementSpeed));
+                    }
+                    break;
+                case 68: // a
+                case 39: // left arrow
+                    if (playerPos.x - movementSpeed >= wallGroup.children[1].BBox.max.x && playerPos.y + 1 <= ceilingPlane.position.y) {
+                        playerPos.add(sideMovement.multiplyScalar(-movementSpeed));
+                    }
+                    break;
+                case 65: // d
+                case 37: // right arrow
+                    if (playerPos.x + movementSpeed <= wallGroup.children[2].BBox.min.x && playerPos.y + 1 <= ceilingPlane.position.y) {
+                        playerPos.add(sideMovement.multiplyScalar(movementSpeed));
+                    }
+                    break;
+                case 32: // space
+                    if (playerPos.y + 1 <= ceilingPlane.position.y - 1) {
+                        playerPos.y += 1;
+                    }
+                    break;
+                case 16: // shift
+                    if (playerPos.y - 1 >= floorPlane.position.y + 4) {
+                        playerPos.y -= 1;
+                    }
+                    break;
+            }
+        }
+
 
 
         // ************************** //
@@ -224,37 +278,18 @@
         ambientLight.position.copy(camera.position);
         scene.add(ambientLight);
 
-        const ambientLight2 = new THREE.PointLight(0xffffff);
-        ambientLight2.position.set(29, 10, -15);
-        scene.add(ambientLight2);
 
-        const ambientLight3 = new THREE.PointLight(0xffffff);
-        ambientLight3.position.set(28, 10, -15);
-        scene.add(ambientLight3);
-
-        const ambientLight4 = new THREE.PointLight(0xffffff);
-        ambientLight4.position.set(28, 10, -20);
-        scene.add(ambientLight4);
+     
 
         // ************************** //
-        // Add Sun Light
+        // Add Light Switch on L
         // ************************** //
-        const sunLight = new THREE.DirectionalLight(0xffffff, 1);
-        sunLight.position.y = 0
-        scene.add(sunLight);
 
-
-
-        // Variável para controlar o estado da luz
-        var isLightOn = false;
+        var isLightOn = true;
 
         // Função para alternar o estado da luz
         function toggleLight() {
             isLightOn = !isLightOn;
-            ambientLight.visible = isLightOn;
-            ambientLight2.visible = isLightOn;
-            ambientLight3.visible = isLightOn;
-            ambientLight4.visible = isLightOn;
             sunLight.visible = isLightOn;
         }
 
@@ -266,94 +301,94 @@
         });
 
 
-    
-        // Criar o material com a textura
-        var texture12 = new THREE.TextureLoader().load('/images/marmore.jpeg');
-        var material12 = new THREE.MeshBasicMaterial({ map: texture12 });
-        var geometry12 = new THREE.BoxGeometry(4, 3, 4);
-        var cube12 = new THREE.Mesh(geometry12, material12);
 
-        // Posicionar o cubo abaixo do objeto
-        cube12.position.set(28, -2, -15);
+        // ************************** //
+        // Add Models
+        // ************************** //
 
-        // Adicionar o cubo à cena
-        scene.add(cube12);
 
-        loader.load(
-            './models/iron_man/scene.gltf',
+        function loadmodel(path, posicao, escala, rotacao) {
+            loader.load(
+            path,
             
             function ( gltf ) {
-                gltf.scene.position.set(28, -0.5, -15);
-                gltf.scene.scale.set(0.0038, 0.0038, 0.0038);
-                gltf.scene.rotation.y = THREE.MathUtils.degToRad(-90);
+                gltf.scene.position.set(posicao.x, posicao.y, posicao.z);
+                gltf.scene.scale.set(escala.x, escala.y, escala.z);
+                gltf.scene.rotation.y = THREE.MathUtils.degToRad(rotacao);
 
                 scene.add( gltf.scene );
 
             }
         );
+        }
 
-         // Criar o material com a textura
-         var texture12 = new THREE.TextureLoader().load('/images/marmore.jpeg');
-        var material12 = new THREE.MeshBasicMaterial({ map: texture12 });
-        var geometry12 = new THREE.BoxGeometry(4, 3, 4);
-        var cube12 = new THREE.Mesh(geometry12, material12);
 
-        // Posicionar o cubo abaixo do objeto
-        cube12.position.set(28, -2, -5);
-
-        // Adicionar o cubo à cena
-        scene.add(cube12);
-
-        loader.load(
-            './models/spider/scene.gltf',
+        function loadlight(path, posicao, escala, rotacao) {
+            loader.load(
+            path,
             
             function ( gltf ) {
-                gltf.scene.position.set(28, -0.5, -5);
-                gltf.scene.scale.set(0.052, 0.052, 0.052);
-                gltf.scene.rotation.y = THREE.MathUtils.degToRad(-90);
+                gltf.scene.position.set(posicao.x, posicao.y, posicao.z);
+                gltf.scene.scale.set(escala.x, escala.y, escala.z);
+                gltf.scene.rotation.y = THREE.MathUtils.degToRad(rotacao);
+
+                scene.add( gltf.scene );
+            }
+        );
+        }
+
+
+        function loadmodelwithbase(path, posicao, escala, rotacao) {
+            loader.load(
+            path,
+            
+            function ( gltf ) {
+                gltf.scene.position.set(posicao.x, posicao.y, posicao.z);
+                gltf.scene.scale.set(escala.x, escala.y, escala.z);
+                gltf.scene.rotation.y = THREE.MathUtils.degToRad(rotacao);
 
                 scene.add( gltf.scene );
 
-            }
-        );
+                var texture = new THREE.TextureLoader().load('/images/marmore.jpeg');
+                var material = new THREE.MeshBasicMaterial({ map: texture });
+                var geometry = new THREE.BoxGeometry(4, 3, 4);
+                var cube = new THREE.Mesh(geometry, material);
 
-         // Criar o material com a textura
-         var texture12 = new THREE.TextureLoader().load('/images/marmore.jpeg');
-        var material12 = new THREE.MeshBasicMaterial({ map: texture12 });
-        var geometry12 = new THREE.BoxGeometry(4, 3, 4);
-        var cube12 = new THREE.Mesh(geometry12, material12);
+                cube.position.set(posicao.x, posicao.y - 1.5, posicao.z);
 
-        // Posicionar o cubo abaixo do objeto
-        cube12.position.set(28, -2, 5);
+                scene.add(cube);
 
-        // Adicionar o cubo à cena
-        scene.add(cube12);
-
-        loader.load(
-            './models/rocket/scene.gltf',
-            
-            function ( gltf ) {
-                gltf.scene.position.set(29, -0.5, 5);
-                gltf.scene.scale.set(4, 4, 4);
-                gltf.scene.rotation.y = THREE.MathUtils.degToRad(170);
-
-                scene.add( gltf.scene );
+                const ambientLight = new THREE.PointLight(0xffffff);
+                ambientLight.position.set(posicao.x, posicao.y, posicao.z);
+                scene.add(ambientLight);
 
             }
         );
+        }
 
-        loader.load(
-            './models/groot/scene.gltf',
-            
-            function ( gltf ) {
-                gltf.scene.position.set(26.5, -0.3, 5);
-                gltf.scene.scale.set(400, 400, 400);
-                gltf.scene.rotation.y = THREE.MathUtils.degToRad(-90);
 
-                scene.add( gltf.scene );
 
-            }
-        );
+        const position1 = { x: 28, y: -0.5, z: -15 }; 
+        const scale1 =  { x: 0.0038, y: 0.0038, z: 0.0038 };
+        loadmodelwithbase('./models/iron_man/scene.gltf', position1, scale1, -90);
+
+        const position2 = { x: 28, y: -0.5, z: -7.5 }; 
+        const scale2 =  { x: 0.052, y: 0.052, z: 0.052 };
+        loadmodelwithbase('./models/spider/scene.gltf', position2, scale2, -90);
+
+        const position3 = { x: 28, y: -0.5, z: 0 }; 
+        const scale3 =  { x: 4, y: 4, z: 4 };
+        loadmodelwithbase('./models/rocket/scene.gltf', position3, scale3, 170);
+
+        const position4 = { x: 27, y: -0.5, z: 0 };
+        const scale4 =  { x: 400, y: 400, z: 400 };
+        loadmodel('./models/groot/scene.gltf', position4, scale4, -90);
+
+        const position5 = { x: 28, y: 11.8, z: -15 };
+        const scale5 =  { x: 1, y: 1, z: 1 };
+        loadmodel('./models/ceiling_light/scene.gltf', position5, scale5, -90);
+
+       
 
 
         // ************************** //
@@ -368,57 +403,7 @@
         scene.add(ceilingPlane);
 
 
-        // ************************** //
-        // Method to Move Character and Avoid Crossing Walls
-        // ************************** //
-
-        function onKeyDown(event) {
-            const movementSpeed = 1;
-
-            const frontDirection = new THREE.Vector3(0, 0, -1);
-            const sideDirection = new THREE.Vector3(-1, 0, 0);
-
-            const frontMovement = frontDirection.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), camera.rotation.y);
-            const sideMovement = sideDirection.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), camera.rotation.y);
-
-            switch (event.keyCode) {
-                case 83: // w
-                case 40: // up arrow
-                    if (playerPos.z - movementSpeed >= (wallGroup.children[0].BBox.max.z) + movementSpeed && playerPos.y + 1 <= ceilingPlane.position.y) {
-                        playerPos.add(frontMovement.multiplyScalar(-movementSpeed));
-                    }
-                    break;
-                case 87: // s
-                case 38: // down arrow
-                    if (playerPos.z + movementSpeed <= wallGroup.children[3].BBox.min.z && playerPos.y - 1 >= floorPlane.position.y) {
-                        playerPos.add(frontMovement.multiplyScalar(movementSpeed));
-                    }
-                    break;
-                case 68: // a
-                case 39: // left arrow
-                    if (playerPos.x - movementSpeed >= wallGroup.children[1].BBox.max.x && playerPos.y + 1 <= ceilingPlane.position.y) {
-                        playerPos.add(sideMovement.multiplyScalar(-movementSpeed));
-                    }
-                    break;
-                case 65: // d
-                case 37: // right arrow
-                    if (playerPos.x + movementSpeed <= wallGroup.children[2].BBox.min.x && playerPos.y + 1 <= ceilingPlane.position.y) {
-                        playerPos.add(sideMovement.multiplyScalar(movementSpeed));
-                    }
-                    break;
-                case 32: // space
-                    if (playerPos.y + 1 <= ceilingPlane.position.y - 1) {
-                        playerPos.y += 1;
-                    }
-                    break;
-                case 16: // shift
-                    if (playerPos.y - 1 >= floorPlane.position.y + 4) {
-                        playerPos.y -= 1;
-                    }
-                    break;
-            }
-        }
-
+    
 
         // ************************** //
         // Add Paintings

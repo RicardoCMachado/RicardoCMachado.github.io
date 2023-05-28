@@ -16,6 +16,8 @@ body {
 }
 
 p,
+ul,
+li,
 img,
 div,
 canvas {
@@ -97,6 +99,19 @@ canvas {
   }
 
 #menu p {
+  font-family: 'Lato';
+  font-size: medium;
+  margin: 0em;
+}
+
+#menu ul {
+  font-family: 'Lato';
+  text-align: left;
+  font-size: medium;
+  margin: 0em;
+}
+
+#menu li {
   font-family: 'Lato';
   font-size: medium;
   margin: 0em;
