@@ -1,0 +1,11 @@
+Model Information:
+* title:	Loki Helmet
+* source:	https://sketchfab.com/3d-models/loki-helmet-bb6315c3500d4ffc84b68151b015621e
+* author:	Edgar Vázquez (https://sketchfab.com/edgar.vz)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Loki Helmet" (https://sketchfab.com/3d-models/loki-helmet-bb6315c3500d4ffc84b68151b015621e) by Edgar Vázquez (https://sketchfab.com/edgar.vz) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

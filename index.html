@@ -24,7 +24,6 @@
                     <li>Use W/A/S/D or Arrows to Move Around</li>
                     <li>Use Space and Shift to go Up and Down</li>
                     <li>Use Mouse to Control the Camera</li>
-                    <li>Use L to control the lights</li>
                 </ul>
                 </div>
             </div>
@@ -56,13 +55,6 @@
         import * as THREE from 'three';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import Stats from "three/addons/libs/stats.module.js";
-        import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-        import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
-        import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
-        import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
-
-        const loader = new GLTFLoader();
     
 
         // ************************** //
@@ -118,7 +110,6 @@
                     y: event.clientY - previousMousePosition.y
                 };
 
-                // Rodar a câmera com base no movimento horizontal do mouse
                 const theta = 0.001 * deltaMove.x;
 
                 camera.rotation.y += theta;
@@ -229,6 +220,18 @@
         floorPlane.position.y = -Math.PI; 
         scene.add(floorPlane);
 
+        // ************************** //
+        // Add Ceiling
+        // ************************** //
+        const planeGeometry2 = new THREE.PlaneGeometry(60, 45); 
+        const planeMateria2 = new THREE.MeshBasicMaterial({map: ceilingTexture, side: THREE.DoubleSide});
+        const ceilingPlane = new THREE.Mesh(planeGeometry2, planeMateria2);
+
+        ceilingPlane.rotation.x = Math.PI / 2; 
+        ceilingPlane.position.y = 12;
+        scene.add(ceilingPlane);
+
+
 
         // ************************** //
         // Add Walls
@@ -278,35 +281,16 @@
         ambientLight.position.copy(camera.position);
         scene.add(ambientLight);
 
-
-     
-
-        // ************************** //
-        // Add Light Switch on L
-        // ************************** //
-
-        var isLightOn = true;
-
-        // Função para alternar o estado da luz
-        function toggleLight() {
-            isLightOn = !isLightOn;
-            sunLight.visible = isLightOn;
-        }
-
-        // Adicionar um ouvinte de eventos para o pressionamento da tecla
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'L' || event.key === 'l') {
-                toggleLight();
-            }
-        });
-
-
+        const sunLight = new THREE.DirectionalLight(0x000000, 1);
+        sunLight.position.set(0, 10, 0);
+        scene.add(sunLight);
 
         // ************************** //
         // Add Models
         // ************************** //
 
-
+        const loader = new GLTFLoader();
+        
         function loadmodel(path, posicao, escala, rotacao) {
             loader.load(
             path,
@@ -322,22 +306,6 @@
         );
         }
 
-
-        function loadlight(path, posicao, escala, rotacao) {
-            loader.load(
-            path,
-            
-            function ( gltf ) {
-                gltf.scene.position.set(posicao.x, posicao.y, posicao.z);
-                gltf.scene.scale.set(escala.x, escala.y, escala.z);
-                gltf.scene.rotation.y = THREE.MathUtils.degToRad(rotacao);
-
-                scene.add( gltf.scene );
-            }
-        );
-        }
-
-
         function loadmodelwithbase(path, posicao, escala, rotacao) {
             loader.load(
             path,
@@ -351,21 +319,49 @@
 
                 var texture = new THREE.TextureLoader().load('/images/marmore.jpeg');
                 var material = new THREE.MeshBasicMaterial({ map: texture });
-                var geometry = new THREE.BoxGeometry(4, 3, 4);
+                var geometry = new THREE.BoxGeometry(4.2, 3, 4.2);
                 var cube = new THREE.Mesh(geometry, material);
 
-                cube.position.set(posicao.x, posicao.y - 1.5, posicao.z);
+                cube.position.set(posicao.x, -2, posicao.z);
 
                 scene.add(cube);
 
-                const ambientLight = new THREE.PointLight(0xffffff);
+                const glassMaterial = new THREE.MeshPhysicalMaterial({
+                    color: 0xffffff, 
+                    transparent: true, 
+                    opacity: 0.3, 
+                    roughness: 0.1, 
+                    metalness: 0.0, 
+                    side: THREE.DoubleSide,
+                    });
+                const glassGeometry = new THREE.BoxGeometry(4.2, 13, 4.2);
+                const glassMesh = new THREE.Mesh(glassGeometry, glassMaterial);
+                glassMesh.position.set(posicao.x, 6, posicao.z);
+                scene.add(glassMesh);
+
+
+                const ambientLight = new THREE.DirectionalLight(0x000000, 1);
                 ambientLight.position.set(posicao.x, posicao.y, posicao.z);
                 scene.add(ambientLight);
+
+                const ambientLight2 = new THREE.DirectionalLight(0x000000, 1);
+                ambientLight2.position.set(posicao.x-3, 10, posicao.z);
+                scene.add(ambientLight2);
+
+                const ambientLight3 = new THREE.DirectionalLight(0x000000, 1);
+                ambientLight3.position.set(posicao.x, 10, posicao.z + 2);
+                scene.add(ambientLight3);
+
+                const ambientLight4 = new THREE.DirectionalLight(0x000000, 1);
+                ambientLight4.position.set(posicao.x, 10, posicao.z - 2);
+                scene.add(ambientLight4);
+
+                const poslamp = { x: posicao.x, y: 11.8, z: posicao.z };
+                loadmodel('./models/ceiling_light/scene.gltf', poslamp, { x: 1, y: 1, z: 1 }, rotacao);
 
             }
         );
         }
-
 
 
         const position1 = { x: 28, y: -0.5, z: -15 }; 
@@ -384,83 +380,109 @@
         const scale4 =  { x: 400, y: 400, z: 400 };
         loadmodel('./models/groot/scene.gltf', position4, scale4, -90);
 
-        const position5 = { x: 28, y: 11.8, z: -15 };
-        const scale5 =  { x: 1, y: 1, z: 1 };
-        loadmodel('./models/ceiling_light/scene.gltf', position5, scale5, -90);
+        const position5 = { x: 28, y: -0.5, z: 7.5 }; 
+        const scale5 =  { x: 4.2, y: 4.2, z: 4.2 };
+        loadmodelwithbase('./models/marvel/scene.gltf', position5, scale5, 180);
 
-       
+        const position6 = { x: 28, y: -0.5, z: 15 }; 
+        const scale6 =  { x: 4.5, y: 4.5, z: 4.5 };
+        loadmodelwithbase('./models/deadpool_fornite/scene.gltf', position6, scale6, -90);
+        
 
+        const position7 = { x: -28, y: 3, z: 15 }; 
+        const scale7 =  { x: 3, y: 3, z: 3 };
+        loadmodelwithbase('./models/loki/scene.gltf', position7, scale7, 90);
 
-        // ************************** //
-        // Add Ceiling
-        // ************************** //
-        const planeGeometry2 = new THREE.PlaneGeometry(60, 45); 
-        const planeMateria2 = new THREE.MeshBasicMaterial({map: ceilingTexture, side: THREE.DoubleSide});
-        const ceilingPlane = new THREE.Mesh(planeGeometry2, planeMateria2);
+        const position8 = { x: -28, y: 3, z: 7.5 }; 
+        const scale8 =  { x: 0.002, y: 0.002, z: 0.002 };
+        loadmodelwithbase('./models/captain_america_shield/scene.gltf', position8, scale8, 60);
 
-        ceilingPlane.rotation.x = Math.PI / 2; 
-        ceilingPlane.position.y = 12;
-        scene.add(ceilingPlane);
+        const position9 = { x: -28, y: 3, z: 0 }; 
+        const scale9 =  { x: 0.003, y: 0.003, z: 0.003 };
+        loadmodelwithbase('./models/thors_hammer_mjolnir/scene.gltf', position9, scale9, 90);
 
+        const position10 = { x: -28, y: 3, z: -7.5 }; 
+        const scale10 =  { x: 0.0015, y: 0.0015, z: 0.0015 };
+        loadmodelwithbase('./models/black/scene.gltf', position10, scale10, 135);
+
+        const position11 = { x: -28, y: 2, z: -15 }; 
+        const scale11 =  { x: 2, y: 2, z: 2 };
+        loadmodelwithbase('./models/coracao/scene.gltf', position11, scale11, 90);
 
     
 
         // ************************** //
         // Add Paintings
         // ************************** //
+       
 
-        const paintingWidth = 12; 
-        const paintingHeight = 8; 
-        const frameMaterial = new THREE.MeshBasicMaterial({ color: 0x404040 });
-        const frameGeometry = new THREE.BoxGeometry(12.5, 8.5, 0.00001);
+        function addpaintingfront (path, posicao, rotacao){
 
+            const paintingWidth = 12; 
+            const paintingHeight = 7; 
 
-        const paintingTexture = new THREE.TextureLoader().load('./images/captain_america_1.jpg');
-        const paintingGeometry = new THREE.PlaneGeometry(paintingWidth, paintingHeight);
-        const paintingMaterial = new THREE.MeshBasicMaterial({ map: paintingTexture, side: THREE.FrontSide });
-        const painting = new THREE.Mesh(paintingGeometry, paintingMaterial);
-        painting.position.set(-22, 4.5, -22.48); 
-        scene.add(painting);
+            const frameMaterial = new THREE.MeshBasicMaterial({ color: 0x404040 });
+            const frameGeometry = new THREE.BoxGeometry(12.5, 7.5, 0.00001);
+            const paintingTexture = new THREE.TextureLoader().load(path);
+            const paintingGeometry = new THREE.PlaneGeometry(paintingWidth, paintingHeight);
+            const paintingMaterial = new THREE.MeshBasicMaterial({ map: paintingTexture, side: THREE.FrontSide });
+            const painting = new THREE.Mesh(paintingGeometry, paintingMaterial);
+            painting.position.set(posicao.x, posicao.y, posicao.z); 
+            painting.rotation.y = THREE.MathUtils.degToRad(rotacao);
+            scene.add(painting);
+            
 
-        const frame = new THREE.Mesh(frameGeometry, frameMaterial);
-        frame.position.set(-22, 4.5, -22.49);
-        scene.add(frame);
+            const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+            frame.position.set(posicao.x, posicao.y, (posicao.z-0.01));
+            scene.add(frame);
+        }
 
+        function addpaintingback (path, posicao, rotacao){
 
-        const paintingTexture2 = new THREE.TextureLoader().load('./images/capitamarvel.jpg'); // Load painting texture
-        const paintingGeometry2 = new THREE.PlaneGeometry(paintingWidth, paintingHeight);
-        const paintingMaterial2 = new THREE.MeshBasicMaterial({ map: paintingTexture2, side: THREE.FrontSide });
-        const painting2 = new THREE.Mesh(paintingGeometry2, paintingMaterial2);
-        painting2.position.set(-7.5, 4.5, -22.48); 
-        scene.add(painting2);
+            const paintingWidth = 12; 
+            const paintingHeight = 7; 
 
-        const frame2 = new THREE.Mesh(frameGeometry, frameMaterial);
-        frame2.position.set(-7.5, 4.5, -22.49);
-        scene.add(frame2);
-
-
-        const paintingTexture3 = new THREE.TextureLoader().load('./images/iron-man-1.jpg'); // Load painting texture
-        const paintingGeometry3 = new THREE.PlaneGeometry(paintingWidth, paintingHeight);
-        const paintingMaterial3 = new THREE.MeshBasicMaterial({ map: paintingTexture3, side: THREE.FrontSide });
-        const painting3 = new THREE.Mesh(paintingGeometry3, paintingMaterial3);
-        painting3.position.set(7.5, 4.5, -22.48); 
-        scene.add(painting3);
-
-        const frame3 = new THREE.Mesh(frameGeometry, frameMaterial);
-        frame3.position.set(7.5, 4.5, -22.49);
-        scene.add(frame3);
+            const frameMaterial = new THREE.MeshBasicMaterial({ color: 0x404040 });
+            const frameGeometry = new THREE.BoxGeometry(12.5, 7.5, 0.00001);
+            const paintingTexture = new THREE.TextureLoader().load(path);
+            const paintingGeometry = new THREE.PlaneGeometry(paintingWidth, paintingHeight);
+            const paintingMaterial = new THREE.MeshBasicMaterial({ map: paintingTexture, side: THREE.FrontSide });
+            const painting = new THREE.Mesh(paintingGeometry, paintingMaterial);
+            painting.position.set(posicao.x, posicao.y, posicao.z); 
+            painting.rotation.y = THREE.MathUtils.degToRad(rotacao);
+            scene.add(painting);
 
 
-        const paintingTexture4 = new THREE.TextureLoader().load('./images/hulk.jpg'); // Load painting texture
-        const paintingGeometry4 = new THREE.PlaneGeometry(paintingWidth, paintingHeight);
-        const paintingMaterial4 = new THREE.MeshBasicMaterial({ map: paintingTexture4, side: THREE.FrontSide });
-        const painting4 = new THREE.Mesh(paintingGeometry4, paintingMaterial4);
-        painting4.position.set(22, 4.5, -22.48); 
-        scene.add(painting4);
+            const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+            frame.position.set(posicao.x, posicao.y, (posicao.z+0.01));
+            scene.add(frame);
+            }
+        
+        const posicao1 = { x: -22, y: 4.5, z: -22.48 };
+        addpaintingfront('./images/captain_america_1.jpg', posicao1, 0);
 
-        const frame4 = new THREE.Mesh(frameGeometry, frameMaterial);
-        frame4.position.set(22, 4.5, -22.49);
-        scene.add(frame4);
+        const posicao2 = { x: -7.5, y: 4.5, z: -22.48 };
+        addpaintingfront('./images/capitamarvel.jpg', posicao2, 0);
+
+        const posicao3 = { x: 7.5, y: 4.5, z: -22.48 };
+        addpaintingfront('./images/iron-man-1.jpg', posicao3, 0);
+
+        const posicao4 = { x: 22, y: 4.5, z: -22.48 };
+        addpaintingfront('./images/hulk.jpg', posicao4, 0);
+
+        const posicao5 = { x: -22, y: 4.5, z: 22.48 };
+        addpaintingback('./images/thor.jpg', posicao5, 180);
+
+        const posicao6 = { x: -7.5, y: 4.5, z: 22.48 };
+        addpaintingback('./images/spider.jpg', posicao6, 180);
+
+        const posicao7 = { x: 7.5, y: 4.5, z: 22.48 };
+        addpaintingback('./images/strange.jpg', posicao7, 180);
+
+        const posicao8 = { x: 22, y: 4.5, z: 22.48 };
+        addpaintingback('./images/guardioes.jpg', posicao8, 180);
+
+
 
 
 

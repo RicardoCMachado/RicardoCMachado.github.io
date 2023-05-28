@@ -1,0 +1,223 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 34135,
+      "max": [
+        6.898975372314453,
+        21.490833282470703,
+        20.15467071533203
+      ],
+      "min": [
+        -27.180923461914063,
+        -12.646706581115723,
+        -11.765769958496094
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 409620,
+      "componentType": 5126,
+      "count": 34135,
+      "max": [
+        0.9999938011169434,
+        0.9998798966407776,
+        0.9999932050704956
+      ],
+      "min": [
+        -0.9999997615814209,
+        -0.9999039173126221,
+        -0.9998780488967896
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 34135,
+      "max": [
+        1.0,
+        1.0105793476104736
+      ],
+      "min": [
+        -0.034763406962156296,
+        0.0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 198528,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "Edgar Vázquez (https://sketchfab.com/edgar.vz)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/loki-helmet-bb6315c3500d4ffc84b68151b015621e",
+      "title": "Loki Helmet"
+    },
+    "generator": "Sketchfab-12.65.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 794112,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 273080,
+      "byteOffset": 794112,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 819240,
+      "byteOffset": 1067192,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 1886432,
+      "uri": "scene.bin"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "Material_41",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.6
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "casco_Material #41_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        0.028657877817749977,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        6.363327158032112e-18,
+        -0.028657877817749977,
+        0.0,
+        0.0,
+        0.028657877817749977,
+        6.363327158032112e-18,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Loki Helmet.fbx"
+    },
+    {
+      "children": [
+        3
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        4
+      ],
+      "matrix": [
+        6.143906516875575e-08,
+        -0.9999999999999982,
+        -1.6653345369377348e-16,
+        0.0,
+        -0.6597478059860584,
+        -4.053428831733491e-08,
+        -0.7514872393561809,
+        0.0,
+        0.7514872393561794,
+        4.61706735705311e-08,
+        -0.6597478059860598,
+        0.0,
+        0.0,
+        -10.555201530456543,
+        -4.178077697753906,
+        1.0
+      ],
+      "name": "casco"
+    },
+    {
+      "mesh": 0,
+      "name": "casco_Material #41_0"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}
