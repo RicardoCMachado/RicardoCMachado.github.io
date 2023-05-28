@@ -7,5 +7,3 @@ var playButton = document.getElementById("play_button");
 
 
 
-
-
