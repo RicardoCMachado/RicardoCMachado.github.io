@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-
         // ************************** //
         // Add Scene
         // ************************** //
@@ -224,9 +223,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         ambientLight.position.copy(camera.position);
         scene.add(ambientLight);
 
-        const sunLight = new THREE.DirectionalLight(0x000000, 1);
-        sunLight.position.set(0, 10, 0);
-        scene.add(sunLight);
+
 
         // ************************** //
         // Add Models
@@ -282,23 +279,6 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
                 glassMesh.position.set(posicao.x, 6, posicao.z);
                 scene.add(glassMesh);
 
-
-                const ambientLight = new THREE.DirectionalLight(0x000000, 1);
-                ambientLight.position.set(posicao.x, posicao.y, posicao.z);
-                scene.add(ambientLight);
-
-                const ambientLight2 = new THREE.DirectionalLight(0x000000, 1);
-                ambientLight2.position.set(posicao.x-3, 10, posicao.z);
-                scene.add(ambientLight2);
-
-                const ambientLight3 = new THREE.DirectionalLight(0x000000, 1);
-                ambientLight3.position.set(posicao.x, 10, posicao.z + 2);
-                scene.add(ambientLight3);
-
-                const ambientLight4 = new THREE.DirectionalLight(0x000000, 1);
-                ambientLight4.position.set(posicao.x, 10, posicao.z - 2);
-                scene.add(ambientLight4);
-
                 const poslamp = { x: posicao.x, y: 11.8, z: posicao.z };
                 loadmodel('./models/ceiling_light/scene.gltf', poslamp, { x: 1, y: 1, z: 1 }, rotacao);
 
@@ -310,48 +290,110 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         const position1 = { x: 28, y: -0.5, z: -15 }; 
         const scale1 =  { x: 0.0038, y: 0.0038, z: 0.0038 };
         loadmodelwithbase('./models/iron_man/scene.gltf', position1, scale1, -90);
+        const ambientLight1 = new THREE.DirectionalLight(0x000000, 1);
+        ambientLight1.position.copy(position1);
+        scene.add(ambientLight1);
+        
 
         const position2 = { x: 28, y: -0.5, z: -7.5 }; 
         const scale2 =  { x: 0.052, y: 0.052, z: 0.052 };
         loadmodelwithbase('./models/spider/scene.gltf', position2, scale2, -90);
+        const ambientLight2 = new THREE.DirectionalLight(0x000000, 1);
+        ambientLight2.position.copy(position2);
+        scene.add(ambientLight2);
 
         const position3 = { x: 28, y: -0.5, z: 0 }; 
         const scale3 =  { x: 4, y: 4, z: 4 };
         loadmodelwithbase('./models/rocket/scene.gltf', position3, scale3, 170);
+        const ambientLight3 = new THREE.DirectionalLight(0x000000, 1);
+        ambientLight3.position.copy(position3);
+        scene.add(ambientLight3);
 
         const position4 = { x: 27, y: -0.5, z: 0 };
         const scale4 =  { x: 400, y: 400, z: 400 };
         loadmodel('./models/groot/scene.gltf', position4, scale4, -90);
+        const ambientLight4 = new THREE.DirectionalLight(0x000000, 1);
+        ambientLight4.position.copy(position4);
+        scene.add(ambientLight4);
 
         const position5 = { x: 28, y: -0.5, z: 7.5 }; 
         const scale5 =  { x: 4.2, y: 4.2, z: 4.2 };
         loadmodelwithbase('./models/marvel/scene.gltf', position5, scale5, 180);
+        const ambientLight5 = new THREE.DirectionalLight(0x000000, 1);
+        ambientLight5.position.copy(position5);
+        scene.add(ambientLight5);
 
         const position6 = { x: 28, y: -0.5, z: 15 }; 
         const scale6 =  { x: 4.5, y: 4.5, z: 4.5 };
         loadmodelwithbase('./models/deadpool_fornite/scene.gltf', position6, scale6, -90);
+        const ambientLight6 = new THREE.DirectionalLight(0x000000, 1);
+        ambientLight6.position.copy(position6);
+        scene.add(ambientLight6);
         
 
         const position7 = { x: -28, y: 3, z: 15 }; 
         const scale7 =  { x: 3, y: 3, z: 3 };
         loadmodelwithbase('./models/loki/scene.gltf', position7, scale7, 90);
+        const ambientLight7 = new THREE.DirectionalLight(0x000000, 1);
+        ambientLight7.position.copy(position7);
+        scene.add(ambientLight7);
 
         const position8 = { x: -28, y: 3, z: 7.5 }; 
         const scale8 =  { x: 0.002, y: 0.002, z: 0.002 };
         loadmodelwithbase('./models/captain_america_shield/scene.gltf', position8, scale8, 60);
+        const ambientLight8 = new THREE.DirectionalLight(0x000000, 1);
+        ambientLight8.position.copy(position8);
+        scene.add(ambientLight8);
 
         const position9 = { x: -28, y: 3, z: 0 }; 
         const scale9 =  { x: 0.003, y: 0.003, z: 0.003 };
         loadmodelwithbase('./models/thors_hammer_mjolnir/scene.gltf', position9, scale9, 90);
+        const ambientLight9 = new THREE.DirectionalLight(0x000000, 1);
+        ambientLight9.position.copy(position9);
+        scene.add(ambientLight9);
 
         const position10 = { x: -28, y: 3, z: -7.5 }; 
         const scale10 =  { x: 0.0015, y: 0.0015, z: 0.0015 };
         loadmodelwithbase('./models/black/scene.gltf', position10, scale10, 135);
+        const ambientLight10 = new THREE.DirectionalLight(0x000000, 1);
+        ambientLight10.position.copy(position10);
+        scene.add(ambientLight10);
 
         const position11 = { x: -28, y: 2, z: -15 }; 
         const scale11 =  { x: 2, y: 2, z: 2 };
         loadmodelwithbase('./models/coracao/scene.gltf', position11, scale11, 90);
+        const ambientLight11 = new THREE.DirectionalLight(0x000000, 1);
+        ambientLight11.position.copy(position11);
+        scene.add(ambientLight11);
 
+
+          // Variável para controlar o estado da luz
+          var isLightOn = true;
+         
+  
+          // Função para alternar o estado da luz
+          function toggleLight() {
+              isLightOn = !isLightOn;
+              ambientLight1.visible = isLightOn;
+              ambientLight2.visible = isLightOn;
+              ambientLight3.visible = isLightOn;
+              ambientLight4.visible = isLightOn;
+              ambientLight5.visible = isLightOn;
+              ambientLight6.visible = isLightOn;
+              ambientLight7.visible = isLightOn;
+              ambientLight8.visible = isLightOn;
+              ambientLight9.visible = isLightOn;
+              ambientLight10.visible = isLightOn;
+              ambientLight11.visible = isLightOn;
+              ambientLight.visible = isLightOn;
+          }
+
+          document.addEventListener('keydown', function (event) {
+            if (event.key === 'L' || event.key === 'l') {
+                toggleLight();
+            }
+        });
+  
     
 
         // ************************** //
@@ -424,6 +466,8 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
         const posicao8 = { x: 22, y: 4.5, z: 22.48 };
         addpaintingback('./images/guardioes.jpg', posicao8, 180);
+
+
 
 
         
