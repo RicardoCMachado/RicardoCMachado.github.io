@@ -1,5 +1,11 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import Stats from "three/addons/libs/stats.module.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+
+
 
         // ************************** //
         // Add Scene
@@ -15,7 +21,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         scene.add(camera);
         camera.position.z = 5;
 
-
+    
         // ************************** //
         // Add Renderer
         // ************************** //
@@ -23,6 +29,12 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor(0xffffff);
         document.body.appendChild(renderer.domElement);
+
+        // ************************** //
+        // Add Player Position
+        // ************************** //
+        const playerPos = new THREE.Vector3(0, 3, 5);
+
 
 
         // ************************** //
@@ -123,13 +135,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         }
 
 
-
-        // ************************** //
-        // Add Player Position
-        // ************************** //
-        const playerPos = new THREE.Vector3(0, 3, 5);
-
-
+        
         // ************************** //
         // Add Textures
         // ************************** //
@@ -154,7 +160,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         // ************************** //
         // Add Floor
         // ************************** //
-        const planeGeometry = new THREE.PlaneGeometry(60, 45);
+        const planeGeometry = new THREE.PlaneGeometry(45, 45);
         const planeMaterial = new THREE.MeshBasicMaterial({ map: floorTexture, side: THREE.DoubleSide});
         const floorPlane = new THREE.Mesh(planeGeometry, planeMaterial); 
 
@@ -165,7 +171,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         // ************************** //
         // Add Ceiling
         // ************************** //
-        const planeGeometry2 = new THREE.PlaneGeometry(60, 45); 
+        const planeGeometry2 = new THREE.PlaneGeometry(45, 45); 
         const planeMateria2 = new THREE.MeshBasicMaterial({map: ceilingTexture, side: THREE.DoubleSide});
         const ceilingPlane = new THREE.Mesh(planeGeometry2, planeMateria2);
 
@@ -182,8 +188,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         scene.add(wallGroup);
 
 
-        const planeGeo = new THREE.PlaneGeometry(60, 45);
-        const planeGeo2 = new THREE.PlaneGeometry(45, 45);
+        const planeGeo = new THREE.PlaneGeometry(45, 45);
         const planeMat = new THREE.MeshBasicMaterial({map: wallsTexture,side: THREE.DoubleSide});
 
 
@@ -197,13 +202,13 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 
         // Left Wall
-        const leftWall = new THREE.Mesh(planeGeo2,planeMat);
+        const leftWall = new THREE.Mesh(planeGeo,planeMat);
         leftWall.rotation.y = Math.PI / 2; 
-        leftWall.position.x = -30; 
+        leftWall.position.x = -22.5; 
 
         // Right Wall
-        const rightWall = new THREE.Mesh(planeGeo2,planeMat);
-        rightWall.position.x = 30;
+        const rightWall = new THREE.Mesh(planeGeo,planeMat);
+        rightWall.position.x = 22.5;
         rightWall.rotation.y = Math.PI / 2; 
 
         wallGroup.add(frontWall, leftWall, rightWall, backWall);
@@ -215,8 +220,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         }
 
 
-
-          // ************************** //
+        // ************************** //
         // Add Ambient Lights
         // ************************** //
         const ambientLight = new THREE.PointLight(0xffffff);
@@ -286,106 +290,206 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         );
         }
 
-
-        const position1 = { x: 28, y: -0.5, z: -15 }; 
+      
+        const position1 = { x: 20.5, y: -0.5, z: -15 }; 
         const scale1 =  { x: 0.0038, y: 0.0038, z: 0.0038 };
         loadmodelwithbase('./models/iron_man/scene.gltf', position1, scale1, -90);
         const ambientLight1 = new THREE.DirectionalLight(0x000000, 1);
         ambientLight1.position.copy(position1);
         scene.add(ambientLight1);
-        
+        const texture = textureLoader.load('./images/irontext.png');
+        const material = new THREE.MeshBasicMaterial({ map: texture });
+        const geometry = new THREE.PlaneGeometry(1, 1); 
+        const figureMesh = new THREE.Mesh(geometry, material);
+        const figurePosition = { x: 18.3, y: -1.7, z: -15 };
+        const figureScale = { x: 3, y: 1, z: 3 };
+        figureMesh.position.copy(figurePosition);
+        figureMesh.scale.copy(figureScale);
+        figureMesh.rotation.y = THREE.MathUtils.degToRad(-90);
+        scene.add(figureMesh);
 
-        const position2 = { x: 28, y: -0.5, z: -7.5 }; 
+        
+        const position2 = { x: 20.5, y: -0.5, z: -7.5 }; 
         const scale2 =  { x: 0.052, y: 0.052, z: 0.052 };
         loadmodelwithbase('./models/spider/scene.gltf', position2, scale2, -90);
         const ambientLight2 = new THREE.DirectionalLight(0x000000, 1);
         ambientLight2.position.copy(position2);
         scene.add(ambientLight2);
+        const texture2 = textureLoader.load('./images/spidertext.png');
+        const material2 = new THREE.MeshBasicMaterial({ map: texture2 });
+        const geometry2 = new THREE.PlaneGeometry(1, 1); 
+        const figureMesh2 = new THREE.Mesh(geometry2, material2);
+        const figurePosition2 = { x: 18.3, y: -1.7, z: -7.5 };
+        const figureScale2 = { x: 3.2, y: 1, z: 3.2 };
+        figureMesh2.position.copy(figurePosition2);
+        figureMesh2.scale.copy(figureScale2);
+        figureMesh2.rotation.y = THREE.MathUtils.degToRad(-90);
+        scene.add(figureMesh2);
 
-        const position3 = { x: 28, y: -0.5, z: 0 }; 
+        const position3 = { x: 20.5, y: -0.5, z: 0 }; 
         const scale3 =  { x: 4, y: 4, z: 4 };
         loadmodelwithbase('./models/rocket/scene.gltf', position3, scale3, 170);
         const ambientLight3 = new THREE.DirectionalLight(0x000000, 1);
         ambientLight3.position.copy(position3);
         scene.add(ambientLight3);
+        const texture3 = textureLoader.load('./images/rato.png');
+        const material3 = new THREE.MeshBasicMaterial({ map: texture3 });
+        const geometry3 = new THREE.PlaneGeometry(1, 1); 
+        const figureMesh3 = new THREE.Mesh(geometry3, material3);
+        const figurePosition3 = { x: 18.3, y: -1.7, z: 0 };
+        const figureScale3 = { x: 2.5, y: 2, z: 2.5 };
+        figureMesh3.position.copy(figurePosition3);
+        figureMesh3.scale.copy(figureScale3);
+        figureMesh3.rotation.y = THREE.MathUtils.degToRad(-90);
+        scene.add(figureMesh3);
 
-        const position4 = { x: 27, y: -0.5, z: 0 };
+        const position4 = { x: 19.5, y: -0.5, z: 0 };
         const scale4 =  { x: 400, y: 400, z: 400 };
         loadmodel('./models/groot/scene.gltf', position4, scale4, -90);
         const ambientLight4 = new THREE.DirectionalLight(0x000000, 1);
         ambientLight4.position.copy(position4);
         scene.add(ambientLight4);
 
-        const position5 = { x: 28, y: -0.5, z: 7.5 }; 
+        const position5 = { x: 20.5, y: -0.5, z: 7.5 }; 
         const scale5 =  { x: 4.2, y: 4.2, z: 4.2 };
         loadmodelwithbase('./models/marvel/scene.gltf', position5, scale5, 180);
         const ambientLight5 = new THREE.DirectionalLight(0x000000, 1);
         ambientLight5.position.copy(position5);
         scene.add(ambientLight5);
+        const texture4 = textureLoader.load('./images/marvel1.png');
+        const material4 = new THREE.MeshBasicMaterial({ map: texture4 });
+        const geometry4 = new THREE.PlaneGeometry(1, 1); 
+        const figureMesh4 = new THREE.Mesh(geometry4, material4);
+        const figurePosition4 = { x: 18.2, y: -1.7, z: 7.5 };
+        const figureScale4 = { x: 2.5, y: 1.5, z: 2.5 };
+        figureMesh4.position.copy(figurePosition4);
+        figureMesh4.scale.copy(figureScale4);
+        figureMesh4.rotation.y = THREE.MathUtils.degToRad(-90);
+        scene.add(figureMesh4);
 
-        const position6 = { x: 28, y: -0.5, z: 15 }; 
+        const position6 = { x: 20.5, y: -0.5, z: 15 }; 
         const scale6 =  { x: 4.5, y: 4.5, z: 4.5 };
         loadmodelwithbase('./models/deadpool_fornite/scene.gltf', position6, scale6, -90);
         const ambientLight6 = new THREE.DirectionalLight(0x000000, 1);
         ambientLight6.position.copy(position6);
         scene.add(ambientLight6);
+        const texture6 = textureLoader.load('./images/deadpool.png');
+        const material6 = new THREE.MeshBasicMaterial({ map: texture6 });
+        const geometry6 = new THREE.PlaneGeometry(1, 1); 
+        const figureMesh6 = new THREE.Mesh(geometry6, material6);
+        const figurePosition6 = { x: 18.2, y: -1.7, z: 15 };
+        const figureScale6 = { x: 3, y: 1.5, z: 3 };
+        figureMesh6.position.copy(figurePosition6);
+        figureMesh6.scale.copy(figureScale6);
+        figureMesh6.rotation.y = THREE.MathUtils.degToRad(-90);
+        scene.add(figureMesh6);
         
 
-        const position7 = { x: -28, y: 3, z: 15 }; 
+        const position7 = { x: -20.5, y: 3, z: 15 }; 
         const scale7 =  { x: 3, y: 3, z: 3 };
         loadmodelwithbase('./models/loki/scene.gltf', position7, scale7, 90);
         const ambientLight7 = new THREE.DirectionalLight(0x000000, 1);
         ambientLight7.position.copy(position7);
         scene.add(ambientLight7);
+        const texture7 = textureLoader.load('./images/loki.png');
+        const material7 = new THREE.MeshBasicMaterial({ map: texture7 });
+        const geometry7 = new THREE.PlaneGeometry(1, 1); 
+        const figureMesh7 = new THREE.Mesh(geometry7, material7);
+        const figurePosition7 = { x: -18.2, y: -1.7, z: 15 };
+        const figureScale7 = { x: 3, y: 1.5, z: 3 };
+        figureMesh7.position.copy(figurePosition7);
+        figureMesh7.scale.copy(figureScale7);
+        figureMesh7.rotation.y = THREE.MathUtils.degToRad(90);
+        scene.add(figureMesh7);
 
-        const position8 = { x: -28, y: 3, z: 7.5 }; 
+        const position8 = { x: -20.5, y: 3, z: 7.5 }; 
         const scale8 =  { x: 0.002, y: 0.002, z: 0.002 };
         loadmodelwithbase('./models/captain_america_shield/scene.gltf', position8, scale8, 60);
         const ambientLight8 = new THREE.DirectionalLight(0x000000, 1);
         ambientLight8.position.copy(position8);
         scene.add(ambientLight8);
+        const texture8 = textureLoader.load('./images/shield.png');
+        const material8 = new THREE.MeshBasicMaterial({ map: texture8 });
+        const geometry8 = new THREE.PlaneGeometry(1, 1); 
+        const figureMesh8 = new THREE.Mesh(geometry8, material8);
+        const figurePosition8 = { x: -18.2, y: -1.7, z: 7.5 };
+        const figureScale8 = { x: 3, y: 2, z: 3 };
+        figureMesh8.position.copy(figurePosition8);
+        figureMesh8.scale.copy(figureScale8);
+        figureMesh8.rotation.y = THREE.MathUtils.degToRad(90);
+        scene.add(figureMesh8);
 
-        const position9 = { x: -28, y: 3, z: 0 }; 
+        const position9 = { x: -20.5, y: 3, z: 0 }; 
         const scale9 =  { x: 0.003, y: 0.003, z: 0.003 };
         loadmodelwithbase('./models/thors_hammer_mjolnir/scene.gltf', position9, scale9, 90);
         const ambientLight9 = new THREE.DirectionalLight(0x000000, 1);
         ambientLight9.position.copy(position9);
         scene.add(ambientLight9);
+        const texture9 = textureLoader.load('./images/hammer.png');
+        const material9 = new THREE.MeshBasicMaterial({ map: texture9 });
+        const geometry9 = new THREE.PlaneGeometry(1, 1); 
+        const figureMesh9 = new THREE.Mesh(geometry9, material9);
+        const figurePosition9 = { x: -18.2, y: -1.7, z: 0 };
+        const figureScale9 = { x: 3, y: 1.5, z: 3 };
+        figureMesh9.position.copy(figurePosition9);
+        figureMesh9.scale.copy(figureScale9);
+        figureMesh9.rotation.y = THREE.MathUtils.degToRad(90);
+        scene.add(figureMesh9);
 
-        const position10 = { x: -28, y: 3, z: -7.5 }; 
-        const scale10 =  { x: 0.0015, y: 0.0015, z: 0.0015 };
+        const position10 = { x: -20.5, y: 3, z: -7.5 }; 
+        const scale10 =  { x: 0.002, y: 0.002, z: 0.002 };
         loadmodelwithbase('./models/black/scene.gltf', position10, scale10, 135);
         const ambientLight10 = new THREE.DirectionalLight(0x000000, 1);
         ambientLight10.position.copy(position10);
         scene.add(ambientLight10);
+        const texture10 = textureLoader.load('./images/mask.png');
+        const material10 = new THREE.MeshBasicMaterial({ map: texture10 });
+        const geometry10 = new THREE.PlaneGeometry(1, 1); 
+        const figureMesh10 = new THREE.Mesh(geometry10, material10);
+        const figurePosition10 = { x: -18.2, y: -1.7, z: -7.5 };
+        const figureScale10 = { x: 3, y: 2, z: 3 };
+        figureMesh10.position.copy(figurePosition10);
+        figureMesh10.scale.copy(figureScale10);
+        figureMesh10.rotation.y = THREE.MathUtils.degToRad(90);
+        scene.add(figureMesh10);
 
-        const position11 = { x: -28, y: 2, z: -15 }; 
+        const position11 = { x: -20.5, y: 2, z: -15 }; 
         const scale11 =  { x: 2, y: 2, z: 2 };
         loadmodelwithbase('./models/coracao/scene.gltf', position11, scale11, 90);
         const ambientLight11 = new THREE.DirectionalLight(0x000000, 1);
         ambientLight11.position.copy(position11);
         scene.add(ambientLight11);
+        const texture11 = textureLoader.load('./images/arc.png');
+        const material11 = new THREE.MeshBasicMaterial({ map: texture11 });
+        const geometry11 = new THREE.PlaneGeometry(1, 1); 
+        const figureMesh11 = new THREE.Mesh(geometry11, material11);
+        const figurePosition11 = { x: -18.2, y: -1.7, z: -15 };
+        const figureScale11 = { x: 3, y: 2, z: 3 };
+        figureMesh11.position.copy(figurePosition11);
+        figureMesh11.scale.copy(figureScale11);
+        figureMesh11.rotation.y = THREE.MathUtils.degToRad(90);
+        scene.add(figureMesh11);
 
 
           // Variável para controlar o estado da luz
-          var isLightOn = true;
+          var isLightOn = false;
          
   
           // Função para alternar o estado da luz
           function toggleLight() {
               isLightOn = !isLightOn;
-              ambientLight1.visible = isLightOn;
-              ambientLight2.visible = isLightOn;
-              ambientLight3.visible = isLightOn;
-              ambientLight4.visible = isLightOn;
-              ambientLight5.visible = isLightOn;
-              ambientLight6.visible = isLightOn;
-              ambientLight7.visible = isLightOn;
-              ambientLight8.visible = isLightOn;
-              ambientLight9.visible = isLightOn;
-              ambientLight10.visible = isLightOn;
-              ambientLight11.visible = isLightOn;
-              ambientLight.visible = isLightOn;
+              ambientLight1.visible = !isLightOn;
+              ambientLight2.visible = !isLightOn;
+              ambientLight3.visible = !isLightOn;
+              ambientLight4.visible = !isLightOn;
+              ambientLight5.visible = !isLightOn;
+              ambientLight6.visible = !isLightOn;
+              ambientLight7.visible = !isLightOn;
+              ambientLight8.visible = !isLightOn;
+              ambientLight9.visible = !isLightOn;
+              ambientLight10.visible = !isLightOn;
+              ambientLight11.visible = !isLightOn;
+              ambientLight.visible = !isLightOn;
           }
 
           document.addEventListener('keydown', function (event) {
@@ -393,7 +497,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
                 toggleLight();
             }
         });
-  
+        
     
 
         // ************************** //
@@ -422,6 +526,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
             scene.add(frame);
         }
 
+
         function addpaintingback (path, posicao, rotacao){
 
             const paintingWidth = 12; 
@@ -443,34 +548,24 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
             scene.add(frame);
             }
         
-        const posicao1 = { x: -22, y: 4.5, z: -22.48 };
+        const posicao1 = { x: -15, y: 4.5, z: -22.48 };
         addpaintingfront('./images/captain_america_1.jpg', posicao1, 0);
 
-        const posicao2 = { x: -7.5, y: 4.5, z: -22.48 };
+        const posicao2 = { x: 0, y: 4.5, z: -22.48 };
         addpaintingfront('./images/capitamarvel.jpg', posicao2, 0);
 
-        const posicao3 = { x: 7.5, y: 4.5, z: -22.48 };
-        addpaintingfront('./images/iron-man-1.jpg', posicao3, 0);
-
-        const posicao4 = { x: 22, y: 4.5, z: -22.48 };
+        const posicao4 = { x: 15, y: 4.5, z: -22.48 };
         addpaintingfront('./images/hulk.jpg', posicao4, 0);
 
-        const posicao5 = { x: -22, y: 4.5, z: 22.48 };
+        const posicao5 = { x: -15, y: 4.5, z: 22.48 };
         addpaintingback('./images/thor.jpg', posicao5, 180);
 
-        const posicao6 = { x: -7.5, y: 4.5, z: 22.48 };
+        const posicao6 = { x: -0, y: 4.5, z: 22.48 };
         addpaintingback('./images/spider.jpg', posicao6, 180);
 
-        const posicao7 = { x: 7.5, y: 4.5, z: 22.48 };
+        const posicao7 = { x: 15, y: 4.5, z: 22.48 };
         addpaintingback('./images/strange.jpg', posicao7, 180);
 
-        const posicao8 = { x: 22, y: 4.5, z: 22.48 };
-        addpaintingback('./images/guardioes.jpg', posicao8, 180);
-
-
-
-
-        
 
 
         let render = function () {
