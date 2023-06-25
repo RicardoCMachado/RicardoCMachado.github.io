@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        
+        .back-button {
+            display: block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+        
+        .back-button:hover {
+            color: #777;
+        }
+        
+        .calendar {
+            margin-bottom: 20px;
+        }
+        
+        .calendar h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        th {
+            background-color: #f0f0f0;
+        }
+        
+        .selectable-date {
+            cursor: pointer;
+        }
+        
+        .selected-date {
+            background-color: #ffefc4;
+        }
+        
+        .form {
+            margin-bottom: 20px;
+        }
+        
+        .form h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        form input[type="text"],
+        form input[type="url"],
+        form select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        form input[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        
+        .confirmation {
+            text-align: center;
+            display: none;
+        }
+        
+        .confirmation h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .confirmation p {
+            margin-bottom: 5px;
+            color: #555;
+        }
+        
+        .confirmation a {
+            color: #4caf50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-button" href="menu.html"><img src="./images/arrow.png" alt="Back" style="width: 20px; height: 20px;">  Voltar</a>
+        <h1>Marcação da Apresentação</h1>
+        <div class="calendar">
+            <h2 id="currentMonth"></h2>
+            <table id="dateTable">
+                <tr>
+                    <th colspan="7">
+                        <button id="previousMonthButton">&lt;</button>
+                        <button id="nextMonthButton">&gt;</button>
+                    </th>
+                </tr>
+                <tr>
+                    <th>Sun</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                </tr>
+                <!-- Restante do código HTML omitido para breveza -->
+            </table>
+        </div>
+
+        <div class="form">
+            <h2>Booking Form:</h2>
+            <form id="bookingForm">
+                <label for="date">Date:</label>
+                <input type="text" id="date" name="date" placeholder="Select a date" readonly>
+
+                <label for="time">Time:</label>
+                <select id="time" name="time" disabled>
+                    <option value="">-- Select a time --</option>
+                    <option value="14:30">14:30</option>
+                    <option value="15:00">15:00</option>
+                    <option value="15:30">15:30</option>
+                </select>
+
+                <label for="nmec">Partner's NMEC:</label>
+                <input type="text" id="nmec" name="nmec" pattern="[0-9]+" placeholder="Enter digits only" required>
+                <p></p>
+                <label for="topic">Work Topic:</label>
+                <input type="text" id="topic" name="topic" placeholder="Enter topic" required>
+                <p></p>
+                <label for="link">Work Link:</label>
+                <input type="url" id="link" name="link" placeholder="Enter link" required>
+                <p></p>
+                <input type="submit" value="Confirm Booking" id="submitButton" disabled>
+            </form>
+        </div>
+
+        <div class="confirmation" id="confirmation" style="display: none;">
+            <h2>Booking Confirmation:</h2>
+            <p>Your booking has been made successfully!</p>
+            <p>Redirecting to <a href="menu.html">Menu</a>...</p>
+        </div>
+    </div>
+
+    <script>
+        // Obtém os elementos relevantes do DOM
+        const currentMonthElement = document.getElementById('currentMonth');
+        const dateTable = document.getElementById('dateTable');
+        const previousMonthButton = document.getElementById('previousMonthButton');
+        const nextMonthButton = document.getElementById('nextMonthButton');
+
+        // Variáveis para rastrear o mês atual e o ano atual
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        // Função para renderizar o calendário com base no mês e ano atuais
+        function renderCalendar() {
+            // Define o cabeçalho do mês
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            currentMonthElement.textContent = monthNames[currentMonth] + ' ' + currentYear;
+
+            // Remove todas as linhas do calendário, exceto a primeira
+            while (dateTable.rows.length > 1) {
+                dateTable.deleteRow(1);
+            }
+
+            // Obtem o primeiro dia do mês atual
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+
+            // Obtem o número total de dias no mês atual
+            const lastDay = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            let date = 1; // Contador para os dias do mês
+
+            // Loop para adicionar as linhas ao calendário
+            for (let i = 0; i < 6; i++) {
+                const row = dateTable.insertRow();
+
+                // Loop para adicionar as células em cada linha
+                for (let j = 0; j < 7; j++) {
+                    const cell = row.insertCell();
+
+                    // Preenche as células com os dias do mês
+                    if (i === 0 && j < firstDay) {
+                        cell.classList.add('empty-date');
+                    } else if (date > lastDay) {
+                        break;
+                    } else {
+                        cell.textContent = date;
+                        date++;
+
+                        // Estiliza o dia atual
+                        if (currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear() && date === new Date().getDate()) {
+                            cell.classList.add('current-date');
+                        }
+
+                        // Adiciona um evento de clique para selecionar o dia
+                        cell.addEventListener('click', function() {
+                            const selectedDate = new Date(currentYear, currentMonth, parseInt(this.textContent));
+                            const currentDate = new Date();
+
+                            // Verifica se a data selecionada é posterior à data atual
+                            if (selectedDate >= currentDate) {
+                                // Remove a classe de seleção de todos os dias
+                                const allDates = document.querySelectorAll('.selectable-date');
+                                allDates.forEach(date => date.classList.remove('selected-date'));
+
+                                // Adiciona a classe de seleção ao dia selecionado
+                                this.classList.add('selected-date');
+
+                                // Atualiza o valor do campo de texto "Date" no formulário
+                                const dateInput = document.getElementById('date');
+                                dateInput.value = selectedDate.toISOString().split('T')[0];
+
+                                // Habilita o campo de seleção de horário
+                                const timeSelect = document.getElementById('time');
+                                timeSelect.disabled = false;
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+        // Evento para ir para o próximo mês
+        nextMonthButton.addEventListener('click', function() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        });
+
+        // Evento para ir para o mês anterior
+        previousMonthButton.addEventListener('click', function() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        });
+
+        // Renderiza o calendário inicial
+        renderCalendar();
+    </script>
+</body>
+</html>

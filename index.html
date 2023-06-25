@@ -1,56 +1,88 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta http-equiv="content-type" content="text/html" charset="UTF-8">
+  <title>PresenTracker</title>
+  <style>
+     body {
+      font-family: Arial, sans-serif;
+      background-image: url('./images/main\ 2.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
 
-    <title>Marvel Museum</title>
+    .container {
+      width: 450px;
+      height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 0 auto;
+      margin-top: 150px;
+    }
 
-    <link rel="icon" type="image/png" href="./images/favicon.png">
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
 
-    <link rel="stylesheet" href="./style.css">
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-    <div id="background_menu"></div>
-    <div id="menu">
-        <div id="img_container">
-            <img src="./images/marvel.jpg">
-        </div>
-        <div id="content">
-            <h2>Marvel Museum Walkthrough <br> with Three.js</h2>
-            <div>
-                <p>Instructions:</p><br/>
-                <div style="display: flex; justify-content: center;">
-                <ul s>
-                    <li>Use W/A/S/D or Arrows to Move Around</li>
-                    <li>Use Space and Shift to go Up and Down</li>
-                    <li>Use Mouse to Control the Camera</li>
-                    <li>Use L to Control the Lights</li>
-                </ul>
-                </div>
-            </div>
-            <div id="play_button">
-                <p>ENTER THE MUSEUM</p>
-            </div>
-        </div>          
-      </div>
+    label {
+      width: 100%;
+      display: block;
+      margin-bottom: 10px;
+      color: #555;
+      font-weight: bold;
+    }
+
+    .login-button {
+      width: 50%;
+      padding: 15px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .login-button:hover {
+      background-color: #45a049;
+    }
+
+    p {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .register-link {
+      color: #007bff;
+      text-decoration: none;
+    }
+  </style>
 </head>
-
-
-
 <body>
-    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://threejs.org/build/three.module.js",
-                "three/addons/": "https://threejs.org/examples/jsm/"
-            }
-        }
-    </script>
-
-    <script type="module" src="./main.js"></script>
-    <script src="./bib/helper.js"></script>
-    
+  <div class="container">
+    <h1>PresenTracker</h1>
+    <form>
+      <h3>Já tens conta?</h3>
+      <a href="login.html" class="login-button">Login</a>
+    </form>
+    <p>Novo utilizador? <a class="register-link" href="register.html">Regista-te!</a></p>
+  </div>
 </body>
-
 </html>

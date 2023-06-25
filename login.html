@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PresenTracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('./images/main.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
+
+    .container {
+      width: 600px;
+      height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 0 auto;
+      margin-top: 100px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    label {
+      width: 100%;
+      display: block;
+      margin-bottom: 10px;
+      color: #555;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 80%;
+      text-align: center;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      width: 50%;
+      padding: 15px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    p {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .register-link {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .login-button {
+      font-size: 15px;
+    }
+
+    .success-message {
+      text-align: center;
+      color: green;
+      margin-top: 20px;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="bla" class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <a style="margin-right: 175px;" href="index.html">
+        <img src="./images/home.png" style="width: 20px; height: 20px;">
+      </a>
+      <h1 style="margin-right: 195px;">Login</h1>
+    </div>
+    <h3>Insere o teu NMEC:</h3>
+    <input id="nmec" type="text" name="nmec" required><br>
+    <h3>Insere a tua Password:</h3>
+    <input id="password" type="password" name="password" required><br>
+    <input id="signin" type="submit" value="Login" class="login-button">
+    <p>Ainda não estás registado? <a class="register-link" href="register.html">Regista-te!</a></p>
+  </div>
+
+  <script>
+    if (localStorage.getItem("auth") == "true")
+      window.location.href = "menu.html";
+
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("status") && urlParams.get("status") == "error") {
+      var errorMessage = document.createElement("p");
+      var createAccountWrapper = document.getElementById("bla");
+      document.body.insertBefore(errorMessage, createAccountWrapper);
+      errorMessage.innerText = "NMEC ou Password incorreta!";
+      errorMessage.style.color = "black";
+      errorMessage.style.fontWeight = "bold";
+    }
+    
+
+    var signinButton = document.getElementById("signin");
+    if (signinButton) {
+      signinButton.addEventListener("click", () => {
+        var user = document.getElementById("nmec");
+        var password = document.getElementById("password");
+
+        if (user && password) {
+          if (localStorage.getItem(user.value) == password.value) {
+            localStorage.setItem("auth", true);
+            window.location.href = "menu.html";
+          } else {
+            window.location.href = "login.html?status=error";
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

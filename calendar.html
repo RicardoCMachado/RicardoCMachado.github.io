@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Date Picker</title>
+  <style>
+    .calendar {
+      font-family: Arial, sans-serif;
+      width: 220px;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    .calendar table {
+      width: 100%;
+    }
+    .calendar th,
+    .calendar td {
+      text-align: center;
+      padding: 5px;
+    }
+    .calendar th {
+      background-color: #eee;
+    }
+    .calendar td {
+      cursor: pointer;
+    }
+    .calendar .selected {
+      background-color: #0066cc;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="calendar">
+    <table>
+      <thead>
+        <tr>
+          <th colspan="7">
+            <select id="month" onchange="generateCalendar()">
+              <option value="0">January</option>
+              <option value="1">February</option>
+              <option value="2">March</option>
+              <option value="3">April</option>
+              <option value="4">May</option>
+              <option value="5">June</option>
+              <option value="6">July</option>
+              <option value="7">August</option>
+              <option value="8">September</option>
+              <option value="9">October</option>
+              <option value="10">November</option>
+              <option value="11">December</option>
+            </select>
+            <select id="year" onchange="generateCalendar()"></select>
+          </th>
+        </tr>
+        <tr>
+          <th>Sun</th>
+          <th>Mon</th>
+          <th>Tue</th>
+          <th>Wed</th>
+          <th>Thu</th>
+          <th>Fri</th>
+          <th>Sat</th>
+        </tr>
+      </thead>
+      <tbody id="calendar-body" onclick="selectDate(event)"></tbody>
+    </table>
+  </div>
+
+  <script>
+    // Get current year
+    var year = new Date().getFullYear();
+
+    // Populate the year dropdown with options
+    var yearDropdown = document.getElementById("year");
+    for (var i = year - 1; i <= year; i++) {
+      var option = document.createElement("option");
+      option.value = i;
+      option.text = i;
+      yearDropdown.appendChild(option);
+    }
+
+    // Generate the calendar
+    function generateCalendar() {
+      var monthDropdown = document.getElementById("month");
+      var selectedMonth = parseInt(monthDropdown.value);
+      var selectedYear = parseInt(yearDropdown.value);
+
+      var date = new Date(selectedYear, selectedMonth, 1);
+      var calendarBody = document.getElementById("calendar-body");
+      calendarBody.innerHTML = "";
+
+      while (date.getMonth() === selectedMonth) {
+        var row = document.createElement("tr");
+
+        for (var i = 0; i < 7; i++) {
+          var cell = document.createElement("td");
+          cell.innerText = date.getDate();
+
+          if (date.getMonth() === selectedMonth) {
+            cell.setAttribute("data-date", date.toISOString().split("T")[0]);
+            cell.setAttribute("data-day", date.getDate());
+            cell.setAttribute("data-month", date.getMonth());
+            cell.setAttribute("data-year", date.getFullYear());
+
+            if (
+              date.toISOString().split("T")[0] ===
+              new Date().toISOString().split("T")[0]
+            ) {
+              cell.classList.add("selected");
+            }
+          } else {
+            cell.classList.add("inactive");
+          }
+
+          row.appendChild(cell);
+          date.setDate(date.getDate() + 1);
+        }
+
+        calendarBody.appendChild(row);
+      }
+    }
+
+    // Select a date
+    function selectDate(event) {
+      var selectedDate = event.target.getAttribute("data-date");
+
+      if (selectedDate) {
+        var selectedCell = document.querySelector(".calendar .selected");
+
+        if (selectedCell) {
+          selectedCell.classList.remove("selected");
+        }
+
+        event.target.classList.add("selected");
+        console.log("Selected date:", selectedDate);
+      }
+    }
+
+    // Generate the calendar on page load
+    generateCalendar();
+  </script>
+</body>
+</html>
