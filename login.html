@@ -130,6 +130,8 @@
       signinButton.addEventListener("click", () => {
         var user = document.getElementById("nmec");
         var password = document.getElementById("password");
+        const numec = document.getElementById('nmec').value;
+        localStorage.setItem('numec', numec);
 
         if (user && password) {
           if (localStorage.getItem(user.value) == password.value) {

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PresenTracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('./images/main3.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            margin-top: 60px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 1);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .presentation-table {
+            margin-top: 20px;
+            padding: 20px
+        }
+        
+        .presentation-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .presentation-table th,
+        .presentation-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        .presentation-table th {
+            background-color: #f0f0f0;
+        }
+        
+        .presentation-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .presentation-table tr:hover {
+            background-color: #ddd;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <a style="margin-left: 75px;" href="menu.html">
+              <img src="./images/home.png" style="width: 20px; height: 20px;">
+            </a>
+            <h1 style="margin-right: 205px;">Datas das Apresentações</h1>
+        </div>
+
+        <div class="presentation-table">
+            <table id="presentationTable">
+                <tr>
+                    <th>Data</th>
+                    <th>Horário</th>
+                    <th>Tópico</th>
+                    <th>NMECs</th>
+                    <th>Código de Apresentação</th>
+                </tr>
+                <tr>
+                    <td>27/06/2023</td>
+                    <td>14:00</td>
+                    <td>Os efeitos da imersão em VR</td>
+                    <td>123456<br>102467</td>
+                    <td>539</td>
+                </tr>
+                <tr>
+                    <td>29/06/2023</td>
+                    <td>16:30</td>
+                    <td>Alteração físicas devido ao álcool e Influência na condução</td>
+                    <td>369626<br>124682</td>
+                    <td>937</td>
+                </tr>
+                <tr>
+                    <td>26/06/2023</td>
+                    <td>16:30</td>
+                    <td>Influência da distância em AR</td>
+                    <td>386725<br>438671</td>
+                    <td>238</td>
+                </tr>
+                <tr>
+                    <td>26/06/2023</td>
+                    <td>17:00</td>
+                    <td>Esteróides e as suas consequências</td>
+                    <td>357983<br>943737</td>
+                    <td>897</td>
+                </tr>
+                <tr>
+                    <td>30/06/2023</td>
+                    <td>10:30</td>
+                    <td>Empatia humana vs Egoísmo</td>
+                    <td>235705<br>468459</td>
+                    <td>123</td>
+                </tr>
+                
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const storedDate = localStorage.getItem('storedDate');
+        const storedTime = localStorage.getItem('storedTime');
+        const storedTopic = localStorage.getItem('storedTopic');
+        const storedNumber = localStorage.getItem('storedNumber');
+        const nmec1 = localStorage.getItem('numec');
+        const nmec2 = localStorage.getItem('storedNmec2');
+
+
+        const table = document.getElementById('presentationTable');
+        const newRow = table.insertRow(-1); 
+
+        const dateCell = newRow.insertCell(0);
+        dateCell.innerHTML = storedDate;
+
+        const timeCell = newRow.insertCell(1);
+        timeCell.innerHTML = storedTime;
+
+        const topicCell = newRow.insertCell(2);
+        topicCell.innerHTML = storedTopic;
+
+        const nmecCell = newRow.insertCell(3);
+        nmecCell.innerHTML = nmec1 + '<br>' + nmec2;
+
+        const numberCell = newRow.insertCell(4);
+        numberCell.innerHTML = storedNumber;
+    </script>
+</body>
+</html>
