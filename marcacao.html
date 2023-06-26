@@ -257,27 +257,27 @@
 
         for (let i = 0; i < selectableDates.length; i++) {
             selectableDates[i].addEventListener('click', function() {
-                // Remove the selected class from all dates
+
                 for (let j = 0; j < selectableDates.length; j++) {
                     selectableDates[j].classList.remove('selected-date');
                 }
 
-                // Add the selected class to the clicked date
+   
                 this.classList.add('selected-date');
 
-                // Enable the time select and submit button
+  
                 timeSelect.disabled = false;
                 submitButton.disabled = false;
 
-                // Set the selected date in the date input field
+              
                 dateInput.value = this.innerText + "/06/2023";
             });
         }
 
         bookingForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form submission
+            event.preventDefault();
 
-            // Get form values
+ 
             const date = dateInput.value;
             const time = timeSelect.value;
             const topic = document.getElementById('top').value;
@@ -290,8 +290,6 @@
             localStorage.setItem('storedNumber', number);
             localStorage.setItem('storedNmec2', nmec2);
 
-
-            // Show the confirmation message
             bookingForm.style.display = 'none';
             confirmation.style.display = 'block';
         });

@@ -90,6 +90,14 @@
       color: red;
       margin-top: 5px;
     }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+
   </style>
 </head>
 <body>
@@ -101,7 +109,7 @@
       <h1 style="margin-right: 195px;">Registar</h1>
     </div>
     <h3>Insere o teu NMEC:</h3>
-    <input id="nmec" type="text" name="nmec" required><br>
+    <input id="nmec" type="number" name="nmec" required><br>
     <h3>Insere a tua Password:</h3>
     <input id="password" type="password" name="password" required><br>
     <h3>Confirma a tua Password:</h3>
@@ -143,12 +151,26 @@
     }
 
     var signupButton = document.getElementById("signup");
-    if (signupButton) {
-      signupButton.addEventListener("click", () => {
-        var user = document.getElementById("nmec");
-        var password = document.getElementById("password");
+      if (signupButton) {
+        signupButton.addEventListener("click", () => {
+          var user = document.getElementById("nmec");
+          var password = document.getElementById("password");
+          var confirmPassword = document.getElementById("confirm-password");
 
-        if (user && password) {
+          if (password.value !== confirmPassword.value) {
+            alert('Passwords não coincidem!');
+            return;
+          }
+
+          if (user.value.trim() === '' || password.value.trim() === '' || confirmPassword.value.trim() === '') {
+            alert('Preencha todos os campos!');
+            return;
+          }
+          
+
+          const numec = document.getElementById('nmec').value;
+          localStorage.setItem('numec', numec);
+
           if (!localStorage.getItem(user.value)) {
             localStorage.setItem(user.value, password.value);
             localStorage.setItem("auth", true);
@@ -156,9 +178,8 @@
           } else {
             window.location.href = "register.html?status=exists";
           }
-        }
-      });
-    }
+        });
+      }
   </script>
 </body>
 </html>
